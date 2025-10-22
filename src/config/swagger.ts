@@ -9,11 +9,11 @@ const options = {
     info: {
       title: "Aero API",
       version: "1.0.0",
-      description: "Документация API для создания организации клиента",
+      description: "Documentation for Aero API",
     },
     servers: [
       {
-        url: "http://localhost:8000",
+        url: "http://localhost:3000",
       },
     ],
   },
