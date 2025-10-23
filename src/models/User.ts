@@ -48,3 +48,5 @@ User.init(
     updatedAt: false,
   }
 );
+
+export default User;

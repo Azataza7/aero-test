@@ -5,11 +5,9 @@ const runMigrations = async () => {
   try {
     console.log("Starting database migrations...\n");
 
-    // Подключение к БД
     await sequelize.authenticate();
     console.log("✓ Database connection established\n");
 
-    // Запуск миграций
     const pendingMigrations = await migrator.pending();
 
     if (pendingMigrations.length === 0) {
@@ -23,7 +21,6 @@ const runMigrations = async () => {
       console.log("\n✓ All migrations completed successfully\n");
     }
 
-    // Показываем выполненные миграции
     const executedMigrations = await migrator.executed();
     console.log("Executed migrations:");
     executedMigrations.forEach((m) => console.log(`  ✓ ${m.name}`));

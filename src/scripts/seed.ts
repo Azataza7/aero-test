@@ -5,11 +5,9 @@ const runSeeders = async () => {
   try {
     console.log("Starting database seeding...\n");
 
-    // Подключение к БД
     await sequelize.authenticate();
     console.log("✓ Database connection established\n");
 
-    // Запуск сидеров
     const pendingSeeders = await seeder.pending();
 
     if (pendingSeeders.length === 0) {
@@ -23,7 +21,6 @@ const runSeeders = async () => {
       console.log("\n✓ All seeders completed successfully\n");
     }
 
-    // Показываем выполненные сидеры
     const executedSeeders = await seeder.executed();
     console.log("Executed seeders:");
     executedSeeders.forEach((s) => console.log(`  ✓ ${s.name}`));

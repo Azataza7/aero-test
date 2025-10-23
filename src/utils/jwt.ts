@@ -1,9 +1,9 @@
-import jwt, { type SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { env } from "../config/envConfig.ts";
 
-const JWT_SECRET = env.JWT_SECRET!;
-const JWT_EXPIRES_IN = env.JWT_EXPIRES_IN!;
+const JWT_SECRET = env.JWT_SECRET as string;
+const JWT_EXPIRES_IN = env.JWT_EXPIRES_IN || "10m";
 
 export interface JwtPayload {
   userId: string;
@@ -11,7 +11,9 @@ export interface JwtPayload {
 }
 
 export const generateAccessToken = (payload: JwtPayload): string => {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  return jwt.sign(payload, JWT_SECRET, {
+    expiresIn: JWT_EXPIRES_IN,
+  } as jwt.SignOptions);
 };
 
 export const generateRefreshToken = (): string => {
@@ -23,5 +25,6 @@ export const verifyAccessToken = (token: string): JwtPayload => {
 };
 
 export const getRefreshTokenExpiry = (): Date => {
-  return new Date(Date.now() + JWT_EXPIRES_IN);
+  const days = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+  return new Date(Date.now() + days);
 };

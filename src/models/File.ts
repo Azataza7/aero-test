@@ -94,3 +94,5 @@ User.hasMany(File, {
   foreignKey: "userId",
   as: "files",
 });
+
+export default File;

@@ -1,7 +1,7 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface, DataTypes } from "sequelize";
 
 export const up = async (queryInterface: QueryInterface): Promise<void> => {
-  await queryInterface.createTable('refresh_tokens', {
+  await queryInterface.createTable("refresh_tokens", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,11 +11,11 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
       type: DataTypes.STRING(255),
       allowNull: false,
       references: {
-        model: 'users',
-        key: 'id',
+        model: "users",
+        key: "id",
       },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
     },
     token: {
       type: DataTypes.STRING(500),
@@ -37,19 +37,19 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
     },
   });
 
-  await queryInterface.addIndex('refresh_tokens', ['user_id'], {
-    name: 'refresh_tokens_user_id_idx',
+  await queryInterface.addIndex("refresh_tokens", ["user_id"], {
+    name: "refresh_tokens_user_id_idx",
   });
 
-  await queryInterface.addIndex('refresh_tokens', ['token'], {
-    name: 'refresh_tokens_token_idx',
+  await queryInterface.addIndex("refresh_tokens", ["token"], {
+    name: "refresh_tokens_token_idx",
   });
 
-  await queryInterface.addIndex('refresh_tokens', ['device_id'], {
-    name: 'refresh_tokens_device_id_idx',
+  await queryInterface.addIndex("refresh_tokens", ["device_id"], {
+    name: "refresh_tokens_device_id_idx",
   });
 };
 
 export const down = async (queryInterface: QueryInterface): Promise<void> => {
-  await queryInterface.dropTable('refresh_tokens');
+  await queryInterface.dropTable("refresh_tokens");
 };

@@ -63,3 +63,5 @@ RefreshToken.init(
     ],
   }
 );
+
+export default RefreshToken;

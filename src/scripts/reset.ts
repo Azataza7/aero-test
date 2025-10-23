@@ -8,22 +8,18 @@ const resetDatabase = async () => {
     await sequelize.authenticate();
     console.log("✓ Database connection established\n");
 
-    // Откат всех сидеров
     console.log("Rolling back seeders...");
     await seeder.down({ to: 0 as any });
     console.log("✓ All seeders rolled back\n");
 
-    // Откат всех миграций
     console.log("Rolling back migrations...");
     await migrator.down({ to: 0 as any });
     console.log("✓ All migrations rolled back\n");
 
-    // Запуск миграций заново
     console.log("Running migrations...");
     await migrator.up();
     console.log("✓ Migrations completed\n");
 
-    // Запуск сидеров заново
     console.log("Running seeders...");
     await seeder.up();
     console.log("✓ Seeders completed\n");

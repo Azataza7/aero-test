@@ -1,7 +1,7 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface, DataTypes } from "sequelize";
 
 export const up = async (queryInterface: QueryInterface): Promise<void> => {
-  await queryInterface.createTable('files', {
+  await queryInterface.createTable("files", {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,11 +11,11 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
       type: DataTypes.STRING(255),
       allowNull: false,
       references: {
-        model: 'users',
-        key: 'id',
+        model: "users",
+        key: "id",
       },
-      onDelete: 'CASCADE',
-      onUpdate: 'CASCADE',
+      onDelete: "CASCADE",
+      onUpdate: "CASCADE",
     },
     filename: {
       type: DataTypes.STRING(255),
@@ -44,15 +44,15 @@ export const up = async (queryInterface: QueryInterface): Promise<void> => {
     },
   });
 
-  await queryInterface.addIndex('files', ['user_id'], {
-    name: 'files_user_id_idx',
+  await queryInterface.addIndex("files", ["user_id"], {
+    name: "files_user_id_idx",
   });
 
-  await queryInterface.addIndex('files', ['upload_date'], {
-    name: 'files_upload_date_idx',
+  await queryInterface.addIndex("files", ["upload_date"], {
+    name: "files_upload_date_idx",
   });
 };
 
 export const down = async (queryInterface: QueryInterface): Promise<void> => {
-  await queryInterface.dropTable('files');
+  await queryInterface.dropTable("files");
 };

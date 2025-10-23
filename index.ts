@@ -4,7 +4,10 @@ import { config } from "dotenv";
 import { logger } from "./src/utils/logger.ts";
 import { setupSwagger } from "./src/config/swagger.ts";
 import type { Request, Response } from "express";
-import { dbConnection, sequelize } from "./src/config/database.ts";
+import { dbConnection } from "./src/config/database.ts";
+import AuthRouter from "./src/routes/authRoutes.ts";
+import FileRouter from "./src/routes/fileRoutes.ts";
+import { startTokenCleanupScheduler } from "./src/utils/cleanupTokens.ts";
 
 config();
 
@@ -19,15 +22,13 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
 app.use(express.json());
+
+app.use("/api/v1/auth", AuthRouter);
+app.use("/api/v1/file", FileRouter);
 
 app.get("/health", (req: Request, res: Response) => {
   res.send({ status: "OK", message: "Server is running" });
-});
-
-app.use((req: Request, res: Response) => {
-  res.status(404).json({ message: "Route not found" });
 });
 
 setupSwagger(app);
@@ -39,5 +40,7 @@ const run = async () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
   });
 };
+
+startTokenCleanupScheduler();
 
 void run();
