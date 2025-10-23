@@ -10,7 +10,12 @@
     "migrate:rollback": "bun run src/scripts/rollback.ts",
     "seed": "bun run src/scripts/seed.ts",
     "db:reset": "bun run src/scripts/reset.ts",
-    "db:setup": "bun run migrate && bun run seed"
+    "db:setup": "bun run migrate && bun run seed",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "test:auth": "bun test src/tests/authController.test.ts",
+    "test:file": "bun test src/tests/fileController.test.ts"
   },
   "dependencies": {
     "@types/jsonwebtoken": "^9.0.10",
@@ -41,6 +46,11 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "@types/jest": "^29.5.0",
+    "@types/supertest": "^2.0.12",
+    "jest": "^29.5.0",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.0"
   }
 }

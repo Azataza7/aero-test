@@ -7,11 +7,9 @@ export interface UserPayload {
   deviceId: string;
 }
 
-export interface AuthRequest<TUser = UserPayload | undefined> extends Request {
-  user: TUser;
+export interface AuthRequest extends Request {
+  user?: UserPayload;
 }
-
-export type AuthenticatedRequest = AuthRequest<UserPayload>;
 
 export const authenticate = async (
   req: Request,

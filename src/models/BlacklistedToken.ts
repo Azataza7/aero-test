@@ -15,10 +15,10 @@ export class BlacklistedToken
   extends Model<BlacklistedTokenAttributes, BlacklistedTokenCreationAttributes>
   implements BlacklistedTokenAttributes
 {
-  public id!: number;
-  public token!: string;
-  public expiresAt!: Date;
-  public readonly createdAt!: Date;
+  declare id: number;
+  declare token: string;
+  declare expiresAt: Date;
+  declare readonly createdAt: Date;
 }
 
 BlacklistedToken.init(
@@ -37,16 +37,12 @@ BlacklistedToken.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-      field: "created_at",
-    },
   },
   {
     sequelize,
     tableName: "blacklisted_tokens",
-    timestamps: false,
+    timestamps: true,
+    createdAt: "created_at", // Map to snake_case column
+    updatedAt: false, // We don't need updatedAt
   }
 );

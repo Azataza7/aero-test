@@ -1,4 +1,4 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/User";
 import { RefreshToken } from "../models/RefreshToken";
@@ -9,11 +9,15 @@ import {
   verifyAccessToken,
   getRefreshTokenExpiry,
 } from "../utils/jwt";
-import { type AuthenticatedRequest } from "../middleware/auth";
+import type { AuthRequest } from "../middleware/auth.ts";
 
 const SALT_ROUNDS = 10;
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const signup = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id, password } = req.body;
 
@@ -58,7 +62,11 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const signin = async (req: Request, res: Response): Promise<void> => {
+export const signin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { id, password } = req.body;
 
@@ -102,7 +110,11 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const newToken = async (req: Request, res: Response): Promise<void> => {
+export const newToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { refreshToken } = req.body;
 
@@ -133,19 +145,32 @@ export const newToken = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const info = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
+  if (!req.user) {
+    res.status(401).send({ success: false, error: "User does not exist" });
+    return;
+  }
+
   res.json({ id: req.user.userId });
 };
 
 export const logout = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader?.substring(7);
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
+      return;
+    }
+
     const deviceId = req.user.deviceId;
 
     if (token) {

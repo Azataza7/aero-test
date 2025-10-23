@@ -1,16 +1,22 @@
-import type { Response } from "express";
+import type { NextFunction, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { File } from "../models/File";
-import type { AuthenticatedRequest } from "../middleware/auth";
+import type { AuthRequest } from "../middleware/auth.ts";
 
 export const uploadFile = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     if (!req.file) {
       res.status(400).json({ error: "No file uploaded" });
+      return;
+    }
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
       return;
     }
 
@@ -37,13 +43,19 @@ export const uploadFile = async (
 };
 
 export const listFiles = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const listSize = parseInt(req.query.list_size as string) || 10;
     const page = parseInt(req.query.page as string) || 1;
     const offset = (page - 1) * listSize;
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
+      return;
+    }
 
     const { count, rows } = await File.findAndCountAll({
       where: { userId: req.user.userId }, // Убрали !
@@ -77,11 +89,17 @@ export const listFiles = async (
 };
 
 export const getFile = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const fileId = parseInt(req.params.id!);
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
+      return;
+    }
 
     if (isNaN(fileId)) {
       res.status(400).json({ error: "Invalid file ID" });
@@ -115,14 +133,20 @@ export const getFile = async (
 };
 
 export const downloadFile = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const fileId = parseInt(req.params.id!);
 
     if (isNaN(fileId)) {
       res.status(400).json({ error: "Invalid file ID" });
+      return;
+    }
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
       return;
     }
 
@@ -153,14 +177,20 @@ export const downloadFile = async (
 };
 
 export const deleteFile = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const fileId = parseInt(req.params.id!);
 
     if (isNaN(fileId)) {
       res.status(400).json({ error: "Invalid file ID" });
+      return;
+    }
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
       return;
     }
 
@@ -192,14 +222,20 @@ export const deleteFile = async (
 };
 
 export const updateFile = async (
-  req: AuthenticatedRequest,
-  res: Response
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const fileId = parseInt(req.params.id!);
 
     if (isNaN(fileId)) {
       res.status(400).json({ error: "Invalid file ID" });
+      return;
+    }
+
+    if (!req.user) {
+      res.status(401).send({ success: false, error: "User does not exist" });
       return;
     }
 
