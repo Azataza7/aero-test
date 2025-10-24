@@ -58,7 +58,7 @@ export const listFiles = async (
     }
 
     const { count, rows } = await File.findAndCountAll({
-      where: { userId: req.user.userId }, // Убрали !
+      where: { userId: req.user.userId },
       limit: listSize,
       offset,
       order: [["uploadDate", "DESC"]],
